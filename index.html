@@ -523,57 +523,64 @@ button[type="submit"]:hover {
     </style>
 
     <script>
-        const modal = document.getElementById('contact-modal');
-        const promptBox = document.getElementById('contact-prompt-box');
-        // Select the close button inside the modal content
-        const closeBtn = document.querySelector('.modal-content .close-btn');
-        const contactForm = document.getElementById('contact-form');
+    // DEFINE YOUR EMAIL ADDRESS HERE (Must be updated!)
+    const EMAIL_ADDRESS = "puttusiva056@gmail.com"; 
 
-        // Open the modal when the prompt box is clicked
-        promptBox.onclick = function() {
-            modal.style.display = 'block';
-        }
+    const modal = document.getElementById('contact-modal');
+    const promptBox = document.getElementById('contact-prompt-box');
+    const closeBtn = document.querySelector('.modal-content .close-btn');
+    const contactForm = document.getElementById('contact-form');
 
-        // Close the modal when the 'x' is clicked
-        closeBtn.onclick = function() {
+    // === MODAL CONTROL (Functionality remains the same) ===
+
+    // Open the modal when the prompt box is clicked
+    promptBox.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    // Close the modal when the 'x' is clicked
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // Close the modal when the user clicks anywhere outside of it
+    window.onclick = function(event) {
+        if (event.target == modal) {
             modal.style.display = 'none';
         }
+    }
 
-        // Close the modal when the user clicks anywhere outside of it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
+    // === FORM SUBMISSION LOGIC (THE FIX) ===
+    contactForm.addEventListener('submit', function(event) {
+        // 1. CRITICAL: Prevent the browser's default, faulty form action
+        event.preventDefault(); 
+        
+        // 2. Retrieve form data
+        const name = document.getElementById('name').value;
+        const contact = document.getElementById('contact').value;
+        const message = document.getElementById('message').value;
 
-        // Handle the form submission
-        contactForm.addEventListener('submit', function(event) {
-            // Note: Since you are using mailto:, the form submission will
-            // still rely on the user's local email client, which is unreliable.
-            // The JavaScript below is for demonstration and logging purposes only.
+        // 3. Construct the email body text with proper formatting (\n for new line)
+        const emailBody = "Name: " + name + "\n" + 
+                          "Email/Phone: " + contact + "\n\n" + 
+                          "Message:\n" + message;
 
-            // This ensures the form data is collected even if mailto fails
-            const name = document.getElementById('name').value;
-            const contact = document.getElementById('contact').value;
-            const message = document.getElementById('message').value;
+        // 4. Construct the full mailto link, ensuring content is URL-encoded for reliability
+        const mailtoLink = "mailto:" + EMAIL_ADDRESS + 
+                           "?subject=" + encodeURIComponent("Portfolio Contact Message") + 
+                           "&body=" + encodeURIComponent(emailBody);
 
-            console.log('--- Form Data Captured ---');
-            console.log('Name:', name);
-            console.log('Email/Phone:', contact);
-            console.log('Message:', message);
-            
-            // Allow the default mailto submission to happen by NOT calling event.preventDefault()
-            // If you were using a proper server-side submission (recommended), you would use:
-            // event.preventDefault();
-            // Then you would use fetch() or an AJAX request to send the data.
-            
-            // Close the modal immediately after the user initiates the send (before their email client opens)
-            setTimeout(() => {
-                modal.style.display = 'none';
-                contactForm.reset();
-            }, 500); // Small delay for effect
-        });
-    </script>
+        // 5. Redirect the browser, forcing the email client to open with the data filled in
+        window.location.href = mailtoLink;
+        
+        // 6. Reset form and close modal for a clean user experience
+        // Use a small delay for the browser to initiate the mailto action first
+        setTimeout(() => {
+            modal.style.display = 'none';
+            contactForm.reset();
+        }, 500); 
+    });
+</script>
 <!--Message Bar Section Ends-->
 
 <!-- footer section starts -->
@@ -654,4 +661,5 @@ button[type="submit"]:hover {
 <script src="./assets/js/script.js"></script>
 
 </body>
+
 </html>
