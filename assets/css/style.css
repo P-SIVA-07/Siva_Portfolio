@@ -367,7 +367,7 @@ header .navbar ul li a:hover {
 .about .row .image img {
   margin: 1rem;
   width: 100%;
-  height: 400px;
+  height: 300px;
   border-radius: 5%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
   transition: 0.3s;
@@ -1227,4 +1227,5 @@ form .button-area {
 #scroll-top.active {
   top: calc(100% - 12rem);
 }
+
 /* scroll top ends */
